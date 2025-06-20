@@ -1,31 +1,52 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>我的主页</title>
+  <title>我的可爱网站</title>
   <style>
+    /* 新增Q版字体（需先加载字体） */
+    @import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap');
+    
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Ma+Shan+Zheng', cursive, sans-serif;
       text-align: center;
       padding: 40px;
+      background-color: #fff5f7; /* 浅粉色背景 */
     }
+    
+    /* 大标题样式 */
+    .welcome-title {
+      font-size: 4rem;         /* 超大字号 */
+      color: #ff6b9a;          /* 粉红色 */
+      text-shadow: 3px 3px 0 #ffd6e7; /* 粉色阴影 */
+      margin: 30px 0;
+      transform: rotate(-2deg); /* 轻微倾斜 */
+      display: inline-block;
+      animation: bounce 1s infinite alternate;
+    }
+    
+    /* 按钮保持原样 */
     .game-button {
       display: inline-block;
-      padding: 12px 24px;
-      background: #2ea44f;
+      padding: 15px 30px;
+      background: #ff9ebb;
       color: white;
-      text-decoration: none;
-      border-radius: 6px;
-      font-weight: bold;
-      margin: 20px 0;
+      font-size: 1.2rem;
+      border-radius: 50px;      /* 椭圆按钮 */
+      box-shadow: 0 4px 0 #d45d84;
+    }
+
+    /* 弹跳动画 */
+    @keyframes bounce {
+      from { transform: translateY(0) rotate(-2deg); }
+      to { transform: translateY(-10px) rotate(-2deg); }
     }
   </style>
 </head>
 <body>
-  <h1>李新燕的私人网站</h1>
+  <!-- 新标题 -->
+  <h1 class="welcome-title">李新燕的私人网站</h1>
   
-  <!-- 跳转按钮 -->
-  <a href="snake/" class="game-button">🐍 玩贪吃蛇游戏</a>
-  
-  <p>其他内容...</p>
+  <!-- 按钮 -->
+  <a href="snake/" class="game-button">🐰 点击玩游戏</a>
 </body>
 </html>
