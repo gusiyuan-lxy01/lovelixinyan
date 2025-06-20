@@ -26,14 +26,10 @@
     
     /* 按钮保持原样 */
     .game-button {
-      display: inline-block;
-      padding: 15px 30px;
-      background: #ff9ebb;
-      color: white;
-      font-size: 1.2rem;
-      border-radius: 50px;      /* 椭圆按钮 */
-      box-shadow: 0 4px 0 #d45d84;
-    }
+  display: block;              /* 改为块级元素 */
+  width: fit-content;          /* 宽度自适应内容 */
+  margin: 30px auto;           /* 上下30px，左右自动（居中） */
+}
 
     /* 弹跳动画 */
     @keyframes bounce {
