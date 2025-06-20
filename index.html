@@ -30,6 +30,21 @@
   width: fit-content;          /* 宽度自适应内容 */
   margin: 30px auto;           /* 上下30px，左右自动（居中） */
 }
+    .game-button {
+  transition: all 0.3s;        /* 动画过渡 */
+}
+
+/* 悬停效果 */
+.game-button:hover {
+  transform: translateY(-2px); /* 上浮2px */
+  box-shadow: 0 6px 0 #d45d84; /* 阴影变大 */
+}
+
+/* 点击效果 */
+.game-button:active {
+  transform: translateY(2px);  /* 下沉2px */
+  box-shadow: 0 2px 0 #d45d84;  /* 阴影缩小 */
+}
 
     /* 弹跳动画 */
     @keyframes bounce {
@@ -43,6 +58,6 @@
   <h1 class="welcome-title">李新燕的私人网站</h1>
   
   <!-- 按钮 -->
-  <a href="snake/" class="game-button">🐰 点击玩游戏</a>
+  <a href="snake/" class="game-button">贪吃蛇小游戏</a>
 </body>
 </html>
