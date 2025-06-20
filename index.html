@@ -64,5 +64,37 @@
   
   <!-- 按钮 -->
   <a href="snake/" class="game-button">贪吃蛇小游戏</a>
+// 在</body>前插入此脚本
+document.addEventListener('DOMContentLoaded', () => {
+  const container = document.createElement('div');
+  container.className = 'meteor-shower';
+  document.body.prepend(container);
+
+  // 随机生成流星
+  function createMeteor() {
+    const meteor = document.createElement('div');
+    meteor.className = 'meteor';
+    
+    // 随机起始位置（屏幕顶部区域）
+    meteor.style.left = Math.random() * 100 + 'vw';
+    meteor.style.top = Math.random() * 20 + 'vh';
+    
+    // 随机大小和速度
+    const size = 1 + Math.random() * 3;
+    meteor.style.width = size + 'px';
+    meteor.style.height = size + 'px';
+    meteor.style.animationDuration = 1 + Math.random() * 3 + 's';
+    
+    container.appendChild(meteor);
+    
+    // 流星消失后移除DOM
+    meteor.addEventListener('animationend', () => {
+      meteor.remove();
+    });
+  }
+
+  // 每0.5秒生成一颗新流星
+  setInterval(createMeteor, 500);
+});
 </body>
 </html>
