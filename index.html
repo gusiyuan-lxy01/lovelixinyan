@@ -25,12 +25,15 @@
     }
     
     /* 按钮保持原样 */
-    .game-button {
-      background: #ff9ebb;
-      color: white;
-      font-size: 1.2rem;
-      border-radius: 50px;           /* 宽度自适应内容 */
-  margin: 30px auto;           /* 上下30px，左右自动（居中） */
+   .game-button {
+  display: block;              /* 关键：改为块级元素 */
+  padding: 15px 30px;
+  background: #ff9ebb;
+  color: white;
+  font-size: 1.2rem;
+  border-radius: 50px;
+  margin: 30px auto;           /* 现在可以水平居中 */
+  width: fit-content;          /* 让宽度自适应文字内容 */
 }
     .game-button {
   transition: all 0.3s;        /* 动画过渡 */
