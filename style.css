@@ -50,7 +50,11 @@ button {
     cursor: pointer;
     transition: background-color 0.3s;
 }
-
+.game-button {
+  display: block;              /* 改为块级元素 */
+  width: fit-content;          /* 宽度自适应内容 */
+  margin: 30px auto;           /* 上下30px，左右自动（居中） */
+}
 button:hover {
     background-color: #2980b9;
 }
