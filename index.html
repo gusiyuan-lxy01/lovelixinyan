@@ -1,15 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的静态网站</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>贪吃蛇游戏</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Hello World!</h1>
-    <p>这是一个纯静态网站示例，可以正常部署在 GitHub Pages。</p>
-    <button id="myButton">点击我</button>
+    <div class="game-container">
+        <h1>贪吃蛇</h1>
+        <div class="score">分数: <span id="score">0</span></div>
+        <canvas id="gameCanvas"></canvas>
+        <div class="controls">
+            <button id="startBtn">开始游戏</button>
+            <div class="mobile-controls">
+                <button class="arrow-btn" id="upBtn">↑</button>
+                <div>
+                    <button class="arrow-btn" id="leftBtn">←</button>
+                    <button class="arrow-btn" id="rightBtn">→</button>
+                </div>
+                <button class="arrow-btn" id="downBtn">↓</button>
+            </div>
+        </div>
+        <div id="gameOver" class="hidden">
+            <h2>恭喜通过，老婆最棒！</h2>
+            <button id="restartBtn">再玩一次</button>
+        </div>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>
