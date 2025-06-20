@@ -3,6 +3,64 @@
 <head>
   <title>我的可爱网站</title>
   <style>
+  /* 流星容器（覆盖整个页面） */
+  .meteor-shower {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* 置于背景层 */
+    overflow: hidden;
+    background: #0a0e17; /* 深色星空背景 */
+  }
+
+  /* 单个流星样式 */
+  .meteor {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 0 10px 1px #7fc1ff;
+    animation: fall linear infinite;
+  }
+
+  /* 流星动画 */
+  @keyframes fall {
+    from {
+      transform: translateX(0) translateY(0);
+      opacity: 1;
+    }
+    to {
+      transform: translateX(500px) translateY(300px);
+      opacity: 0;
+    }
+  }
+
+  /* 动态生成流星（通过CSS变量控制） */
+  .meteor:nth-child(1) {
+    top: 10%;
+    left: 50%;
+    animation-duration: 2s;
+    animation-delay: 0s;
+  }
+  .meteor:nth-child(2) {
+    top: 30%;
+    left: 20%;
+    animation-duration: 3s;
+    animation-delay: 1s;
+  }
+  /* 更多流星... */
+</style>
+
+<!-- 在<body>开头添加 -->
+<div class="meteor-shower">
+  <div class="meteor"></div>
+  <div class="meteor"></div>
+  <!-- 添加更多<div>或使用JS生成 -->
+</div>
+  <style>
     /* 新增Q版字体（需先加载字体） */
     @import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap');
     
@@ -64,37 +122,5 @@
   
   <!-- 按钮 -->
   <a href="snake/" class="game-button">贪吃蛇小游戏</a>
-// 在</body>前插入此脚本
-document.addEventListener('DOMContentLoaded', () => {
-  const container = document.createElement('div');
-  container.className = 'meteor-shower';
-  document.body.prepend(container);
-
-  // 随机生成流星
-  function createMeteor() {
-    const meteor = document.createElement('div');
-    meteor.className = 'meteor';
-    
-    // 随机起始位置（屏幕顶部区域）
-    meteor.style.left = Math.random() * 100 + 'vw';
-    meteor.style.top = Math.random() * 20 + 'vh';
-    
-    // 随机大小和速度
-    const size = 1 + Math.random() * 3;
-    meteor.style.width = size + 'px';
-    meteor.style.height = size + 'px';
-    meteor.style.animationDuration = 1 + Math.random() * 3 + 's';
-    
-    container.appendChild(meteor);
-    
-    // 流星消失后移除DOM
-    meteor.addEventListener('animationend', () => {
-      meteor.remove();
-    });
-  }
-
-  // 每0.5秒生成一颗新流星
-  setInterval(createMeteor, 500);
-});
 </body>
 </html>
