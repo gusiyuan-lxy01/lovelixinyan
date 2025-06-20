@@ -53,6 +53,73 @@
   }
   /* 更多流星... */
 </style>
+  <!DOCTYPE html>
+<html>
+<head>
+  <style>
+    /* 新增的跑酷动画容器（固定在页面底部） */
+    .runner-container {
+      position: fixed;
+      bottom: 20px;
+      left: 0;
+      width: 100%;
+      height: 80px;
+      background: transparent;
+      overflow: hidden;
+    }
+    
+    /* 小人角色 */
+    .runner {
+      width: 60px;
+      height: 60px;
+      background: #ff6b9a;
+      border-radius: 50% 50% 10px 10px;
+      position: absolute;
+      bottom: 0;
+      left: -60px; /* 初始位置在左侧外 */
+      animation: run 4s linear infinite;
+    }
+    
+    /* 跑步动画关键帧 */
+    @keyframes run {
+      0% { 
+        left: -60px;
+        transform: scaleX(1); /* 正面朝向 */
+      }
+      49% { transform: scaleX(1); }
+      50% { 
+        left: 100%;
+        transform: scaleX(-1); /* 到达右侧时翻转 */
+      }
+      99% { transform: scaleX(-1); }
+      100% { 
+        left: -60px;
+        transform: scaleX(1);
+      }
+    }
+    
+    /* 添加地面效果 */
+    .runner::after {
+      content: "";
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: #333;
+    }
+  </style>
+</head>
+<body>
+  <!-- 您原有的内容 -->
+  <h1 class="welcome-title">欢迎！</h1>
+  
+  <!-- 新增的跑酷动画 -->
+  <div class="runner-container">
+    <div class="runner"></div>
+  </div>
+</body>
+</html>
 
 <!-- 在<body>开头添加 -->
 <div class="meteor-shower">
