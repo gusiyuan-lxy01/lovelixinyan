@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
             scoreDisplay.textContent = score;
             
             // 通关检测
-            if (score >= 100) {
+            if (score >= 200) {
                 gamePass();
                 return;
             }
@@ -174,7 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (gameLoop) clearInterval(gameLoop);
         initGame();
         gameRunning = true;
-        gameSpeed = 200;
+        gameSpeed = 250;
         gameLoop = setInterval(gameUpdate, gameSpeed);
     }
     
