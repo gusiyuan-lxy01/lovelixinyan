@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let nextDirection = 'right';
     let gameRunning = false;
     let score = 0;
-    let gameSpeed = 350;
+    let gameSpeed = 700; // 初始速度降低一倍（原350ms → 700ms）
     let gameLoop = null;
     
     // 初始化游戏
@@ -95,8 +95,8 @@ document.addEventListener('DOMContentLoaded', () => {
             score += 10;
             scoreDisplay.textContent = score;
             
-            // 通关检测
-            if (score >= 200) {
+            // 通关检测（分数改为250）
+            if (score >= 250) { // 原200 → 250
                 gamePass();
                 return;
             }
@@ -174,7 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (gameLoop) clearInterval(gameLoop);
         initGame();
         gameRunning = true;
-        gameSpeed = 300;
+        gameSpeed = 700; // 初始速度同步修改为700ms
         gameLoop = setInterval(gameUpdate, gameSpeed);
     }
     
