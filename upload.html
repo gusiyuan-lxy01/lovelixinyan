@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Issues 图片上传</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        code {
+            background: #f4f4f4;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        img {
+            max-width: 100%;
+            border: 1px solid #ddd;
+            margin: 10px 0;
+        }
+        .upload-steps {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>📷 通过 GitHub Issues 上传图片</h1>
+    
+    <div class="upload-steps">
+        <h2>如何上传？</h2>
+        <ol>
+            <li>
+                打开 <a href="https://github.com/你的用户名/你的仓库名/issues/new" target="_blank">GitHub Issues 页面</a>。
+            </li>
+            <li>
+                <strong>拖拽图片</strong>到 Issue 的编辑框中（或点击上传按钮）。
+                <br>
+                <img src="https://user-images.githubusercontent.com/xxx/xxx.png" alt="拖拽图片示例" width="500">
+            </li>
+            <li>
+                上传完成后，你会看到类似这样的 Markdown 代码：
+                <br>
+                <code>![image](https://user-images.githubusercontent.com/123456/78901234-xxxxxx.png)</code>
+                <br>
+                复制这段链接。
+            </li>
+            <li>
+                在你的网页代码中，用 <code>&lt;img src="复制的链接"&gt;</code> 显示图片。
+            </li>
+        </ol>
+    </div>
+
+    <h2>示例图片</h2>
+    <!-- 替换成你上传的图片链接 -->
+    <img src="https://user-images.githubusercontent.com/xxx/xxx.png" alt="示例图片">
+</body>
+</html>
