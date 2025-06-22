@@ -1,49 +1,51 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GitHub 图片显示工具</title>
+    <title>GitHub 图片显示</title>
     <style>
-        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
-        textarea { width: 100%; height: 100px; margin: 10px 0; padding: 10px; border: 1px solid #ddd; }
-        button { background: #0366d6; color: white; border: none; padding: 10px 15px; cursor: pointer; }
-        #preview { margin-top: 20px; text-align: center; }
-        #preview img { max-width: 100%; border: 1px solid #ddd; }
-        .error { color: red; }
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        #preview {
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+        .error {
+            color: red;
+        }
     </style>
 </head>
 <body>
-    <h1>GitHub 图片显示工具</h1>
-    <p>粘贴 GitHub Issues 图片链接（格式：<code>![image](https://github.com/user-attachments/assets/94cd2e46-9b0c-413b-b635-fc7cf8dafec3)</code>）：</p>
-    <textarea id="markdownInput" placeholder="例如：https://user-images.githubusercontent.com/12345678/123456789-abcdef.jpg"></textarea>
-    <button onclick="showImage()">显示图片</button>
+    <h1>GitHub 图片显示</h1>
     <div id="preview">
-        <p>图片预览：</p>
+        <!-- 图片会在这里自动加载 -->
     </div>
 
     <script>
-        function showImage() {
-            const input = document.getElementById("markdownInput").value.trim();
+        // ⭐ 你的 GitHub 图片链接（直接替换成你的）
+        const imageUrl = "https://github.com/user-attachments/assets/94cd2e46-9b0c-413b-b635-fc7cf8dafec3";
+
+        // 页面加载后自动显示图片
+        window.onload = function() {
             const previewDiv = document.getElementById("preview");
-            previewDiv.innerHTML = "<p>图片预览：</p>";
-
-            // 提取 URL（支持直接链接或 Markdown）
-            let imageUrl;
-            if (input.startsWith("https://")) {
-                imageUrl = input;
-            } else {
-                const matches = input.match(/!\[.*?\]\((.*?)\)/);
-                imageUrl = matches ? matches[1] : input;
-            }
-
-            // 显示图片
-            previewDiv.innerHTML += `
+            previewDiv.innerHTML = `
                 <img src="${imageUrl}" alt="GitHub 图片" 
-                     onerror="this.parentNode.innerHTML += '<p class=\"error\">❌ 图片加载失败！检查链接是否有效</p>'">
-                <p><small>链接：<code>${imageUrl}</code></small></p>
+                     onerror="this.parentNode.innerHTML += '<p class=\"error\">❌ 图片加载失败！请检查链接是否有效。</p>'">
+                <p><small>图片 URL: <code>${imageUrl}</code></small></p>
             `;
-        }
+        };
     </script>
 </body>
 </html>
