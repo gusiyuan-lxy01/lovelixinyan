@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>钢琴块小游戏</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .game-container {
+            width: 300px;
+            height: 500px;
+            background-color: #222;
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+        
+        .piano-key {
+            width: 75px;
+            height: 100px;
+            position: absolute;
+            bottom: 0;
+            transition: background-color 0.1s;
+            cursor: pointer;
+        }
+        
+        .piano-key.black {
+            background-color: #111;
+            z-index: 2;
+            height: 60px;
+            width: 40px;
+        }
+        
+        .piano-key.white {
+            background-color: #fff;
+            z-index: 1;
+            border: 1px solid #ddd;
+        }
+        
+        .piano-key.active {
+            background-color: #4CAF50;
+        }
+        
+        .piano-key.black.active {
+            background-color: #2E7D32;
+        }
+        
+        .falling-block {
+            width: 75px;
+            height: 20px;
+            background-color: #4CAF50;
+            position: absolute;
+            z-index: 3;
+        }
+        
+        .score-display {
+            margin-top: 20px;
+            font-size: 24px;
+            color: #333;
+        }
+        
+        .start-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .start-button:hover {
+            background-color: #2E7D32;
+        }
+    </style>
+</head>
+<body>
+    <h1>钢琴块小游戏</h1>
+    <div class="score-display">得分: <span id="score">0</span></div>
+    <div class="game-container" id="gameContainer">
+        <!-- 钢琴键 -->
+        <div class="piano-key white" data-note="C" style="left: 0;"></div>
+        <div class="piano-key black" data-note="C#" style="left: 55px;"></div>
+        <div class="piano-key white" data-note="D" style="left: 75px;"></div>
+        <div class="piano-key black" data-note="D#" style="left: 130px;"></div>
+        <div class="piano-key white" data-note="E" style="left: 150px;"></div>
+        <div class="piano-key white" data-note="F" style="left: 225px;"></div>
+        
+        <!-- 下落方块会在这里动态生成 -->
+    </div>
+    <button class="start-button" id="startButton">开始游戏</button>
+
+    <script>
+        const gameContainer = document.getElementById('gameContainer');
+        const startButton = document.getElementById('startButton');
+        const scoreDisplay = document.getElementById('score');
+        const pianoKeys = document.querySelectorAll('.piano-key');
+        const notes = ['C', 'C#', 'D', 'D#', 'E', 'F'];
+        
+        let score = 0;
+        let gameActive = false;
+        let animationId;
+        let blocks = [];
+        let blockSpeed = 2;
+        let blockInterval = 1500; // 方块生成间隔(ms)
+        let lastBlockTime = 0;
+        
+        // 初始化音频上下文
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        
+        // 播放音符函数
+        function playNote(note) {
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.type = 'sine';
+            oscillator.frequency.value = getNoteFrequency(note);
+            
+            gainNode.gain.value = 0.1;
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.start();
+            oscillator.stop(audioContext.currentTime + 0.5);
+        }
+        
+        // 获取音符频率
+        function getNoteFrequency(note) {
+            const frequencies = {
+                'C': 261.63,
+                'C#': 277.18,
+                'D': 293.66,
+                'D#': 311.13,
+                'E': 329.63,
+                'F': 349.23
+            };
+            return frequencies[note];
+        }
+        
+        // 创建下落方块
+        function createBlock() {
+            const block = document.createElement('div');
+            block.className = 'falling-block';
+            
+            // 随机选择一个音符
+            const randomNoteIndex = Math.floor(Math.random() * notes.length);
+            const note = notes[randomNoteIndex];
+            block.dataset.note = note;
+            
+            // 根据音符设置位置
+            const key = document.querySelector(`.piano-key[data-note="${note}"]`);
+            block.style.left = key.style.left;
+            block.style.top = '0';
+            
+            gameContainer.appendChild(block);
+            blocks.push(block);
+        }
+        
+        // 更新方块位置
+        function updateBlocks() {
+            const currentTime = Date.now();
+            
+            // 定期生成新方块
+            if (currentTime - lastBlockTime > blockInterval && gameActive) {
+                createBlock();
+                lastBlockTime = currentTime;
+                
+                // 随着游戏进行加快方块生成速度
+                if (score > 0 && score % 5 === 0 && blockInterval > 800) {
+                    blockInterval -= 50;
+                }
+            }
+            
+            // 移动所有方块
+            for (let i = blocks.length - 1; i >= 0; i--) {
+                const block = blocks[i];
+                const currentTop = parseInt(block.style.top);
+                const newTop = currentTop + blockSpeed;
+                block.style.top = `${newTop}px`;
+                
+                // 检查是否到达底部
+                if (newTop >= gameContainer.offsetHeight - 100) {
+                    // 如果方块到达底部但未被点击，游戏结束
+                    if (!block.classList.contains('hit')) {
+                        endGame();
+                        return;
+                    }
+                    
+                    // 移除已点击的方块
+                    block.remove();
+                    blocks.splice(i, 1);
+                }
+            }
+            
+            animationId = requestAnimationFrame(updateBlocks);
+        }
+        
+        // 开始游戏
+        function startGame() {
+            if (gameActive) return;
+            
+            gameActive = true;
+            score = 0;
+            scoreDisplay.textContent = score;
+            blocks = [];
+            blockSpeed = 2;
+            blockInterval = 1500;
+            lastBlockTime = Date.now();
+            
+            // 清除所有现有方块
+            document.querySelectorAll('.falling-block').forEach(block => block.remove());
+            
+            startButton.textContent = '游戏中...';
+            updateBlocks();
+        }
+        
+        // 结束游戏
+        function endGame() {
+            gameActive = false;
+            cancelAnimationFrame(animationId);
+            startButton.textContent = '重新开始';
+            
+            alert(`游戏结束! 你的得分是: ${score}`);
+        }
+        
+        // 点击钢琴键
+        pianoKeys.forEach(key => {
+            key.addEventListener('mousedown', () => {
+                if (!gameActive) return;
+                
+                const note = key.dataset.note;
+                playNote(note);
+                key.classList.add('active');
+                
+                // 检查是否有方块可以被点击
+                const keyLeft = parseInt(key.style.left);
+                const keyWidth = key.offsetWidth;
+                
+                for (let i = 0; i < blocks.length; i++) {
+                    const block = blocks[i];
+                    const blockLeft = parseInt(block.style.left);
+                    const blockTop = parseInt(block.style.top);
+                    
+                    // 如果方块与钢琴键匹配且在可点击范围内
+                    if (block.dataset.note === note && 
+                        blockTop >= gameContainer.offsetHeight - 120 && 
+                        blockTop <= gameContainer.offsetHeight - 80) {
+                        
+                        // 标记为已点击
+                        block.classList.add('hit');
+                        block.style.backgroundColor = '#FF9800';
+                        
+                        // 增加分数
+                        score++;
+                        scoreDisplay.textContent = score;
+                        
+                        // 随着分数增加加快下落速度
+                        if (score % 3 === 0) {
+                            blockSpeed += 0.2;
+                        }
+                        
+                        break;
+                    }
+                }
+            });
+            
+            key.addEventListener('mouseup', () => {
+                key.classList.remove('active');
+            });
+        });
+        
+        // 开始游戏按钮
+        startButton.addEventListener('click', startGame);
+    </script>
+</body>
+</html>
