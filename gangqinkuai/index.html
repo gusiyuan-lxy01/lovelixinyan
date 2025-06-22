@@ -220,7 +220,52 @@
         // 更新方块位置
         function updateBlocks() {
             const currentTime = Date.now();
-            
+            const block = document.createElement('div');
+    
+    // 随机选择一个音符
+    const randomNoteIndex = Math.floor(Math.random() * notes.length);
+    const note = notes[randomNoteIndex];
+    const keyInfo = keyPositions[note];
+    
+    // 判断是大方块还是小方块
+    const isBigBlock = !keyInfo.isBlack;
+    
+    // 设置方块文字内容
+    const smallTexts = ["老婆", "真爱", "真棒", "爱你", "亲亲", "么么"];
+    const bigTexts = ["爱你老婆", "燕子你最棒", "白头偕老", "老婆暴富", "一生一世", "永远爱你"];
+    const randomText = isBigBlock ? 
+        bigTexts[Math.floor(Math.random() * bigTexts.length)] :
+        smallTexts[Math.floor(Math.random() * smallTexts.length)];
+    
+    block.dataset.note = note;
+    block.className = `falling-block ${keyInfo.isBlack ? 'black-target' : 'white-target'}`;
+    block.style.left = `${keyInfo.left}px`;
+    block.style.top = '0';
+    
+    // 添加文字元素
+    const textSpan = document.createElement('span');
+    textSpan.textContent = randomText;
+    textSpan.style.color = keyInfo.isBlack ? '#fff' : '#000';
+    textSpan.style.position = 'absolute';
+    textSpan.style.width = '100%';
+    textSpan.style.textAlign = 'center';
+    textSpan.style.fontSize = isBigBlock ? '14px' : '12px';
+    textSpan.style.fontWeight = 'bold';
+    textSpan.style.top = '50%';
+    textSpan.style.left = '50%';
+    textSpan.style.transform = 'translate(-50%, -50%)';
+    
+    block.appendChild(textSpan);
+    gameContainer.appendChild(block);
+    
+    blocks.push({
+        element: block,
+        note: note,
+        left: keyInfo.left,
+        width: keyInfo.width,
+        isBlack: keyInfo.isBlack,
+        hit: false
+    });
             // 定期生成新方块
             if (currentTime - lastBlockTime > blockInterval && gameActive) {
                 createBlock();
