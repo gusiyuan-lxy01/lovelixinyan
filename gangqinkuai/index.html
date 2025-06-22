@@ -62,6 +62,7 @@
             height: 20px;
             background-color: #4CAF50;
             z-index: 3;
+            border-radius: 3px;
         }
         
         .falling-block.white-target {
@@ -70,6 +71,16 @@
         
         .falling-block.black-target {
             width: 40px;
+        }
+        
+        .hit-zone {
+            position: absolute;
+            width: 100%;
+            height: 40px;
+            bottom: 100px;
+            background-color: rgba(255, 255, 0, 0.2);
+            z-index: 4;
+            pointer-events: none;
         }
         
         .score-display {
@@ -106,6 +117,9 @@
         <div class="piano-key black" data-note="D#" style="left: 130px;"></div>
         <div class="piano-key white" data-note="E" style="left: 150px;"></div>
         <div class="piano-key white" data-note="F" style="left: 225px;"></div>
+        
+        <!-- 命中区域指示 -->
+        <div class="hit-zone" id="hitZone"></div>
     </div>
     <button class="start-button" id="startButton">开始游戏</button>
 
@@ -114,6 +128,7 @@
         const startButton = document.getElementById('startButton');
         const scoreDisplay = document.getElementById('score');
         const pianoKeys = document.querySelectorAll('.piano-key');
+        const hitZone = document.getElementById('hitZone');
         const notes = ['C', 'C#', 'D', 'D#', 'E', 'F'];
         
         let score = 0;
@@ -123,7 +138,11 @@
         let blockSpeed = 2;
         let blockInterval = 1500;
         let lastBlockTime = 0;
-        let keyPositions = {}; // 存储每个钢琴键的精确位置
+        let keyPositions = {};
+        
+        // 命中区域参数
+        const HIT_ZONE_HEIGHT = 40;
+        const HIT_ZONE_TOP = gameContainer.offsetHeight - 100 - HIT_ZONE_HEIGHT;
         
         // 初始化音频上下文
         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -193,7 +212,8 @@
                 note: note,
                 left: keyInfo.left,
                 width: keyInfo.width,
-                isBlack: keyInfo.isBlack
+                isBlack: keyInfo.isBlack,
+                hit: false
             });
         }
         
@@ -219,13 +239,17 @@
                 const newTop = currentTop + blockSpeed;
                 block.element.style.top = `${newTop}px`;
                 
-                // 检查是否到达底部
-                const hitZoneTop = gameContainer.offsetHeight - 120;
-                const hitZoneBottom = gameContainer.offsetHeight - 80;
+                // 检查是否进入命中区域
+                if (!block.hit && newTop >= HIT_ZONE_TOP && newTop <= HIT_ZONE_TOP + HIT_ZONE_HEIGHT) {
+                    block.inHitZone = true;
+                } else if (newTop > HIT_ZONE_TOP + HIT_ZONE_HEIGHT) {
+                    block.inHitZone = false;
+                }
                 
-                if (newTop >= gameContainer.offsetHeight - 100) {
+                // 检查是否到达底部
+                if (newTop >= gameContainer.offsetHeight) {
                     // 如果方块到达底部但未被点击，游戏结束
-                    if (!block.element.classList.contains('hit')) {
+                    if (!block.hit) {
                         endGame();
                         return;
                     }
@@ -280,19 +304,13 @@
                 key.classList.add('active');
                 
                 // 检查是否有方块可以被点击
-                const hitZoneTop = gameContainer.offsetHeight - 120;
-                const hitZoneBottom = gameContainer.offsetHeight - 80;
-                
                 for (let i = 0; i < blocks.length; i++) {
                     const block = blocks[i];
-                    const blockTop = parseInt(block.element.style.top);
                     
-                    // 如果方块与钢琴键匹配且在可点击范围内
-                    if (block.note === note && 
-                        blockTop >= hitZoneTop && 
-                        blockTop <= hitZoneBottom) {
-                        
+                    // 如果方块与钢琴键匹配且在命中区域内
+                    if (!block.hit && block.note === note && block.inHitZone) {
                         // 标记为已点击
+                        block.hit = true;
                         block.element.classList.add('hit');
                         block.element.style.backgroundColor = '#FF9800';
                         
@@ -317,6 +335,9 @@
         
         // 开始游戏按钮
         startButton.addEventListener('click', startGame);
+        
+        // 初始化命中区域位置
+        hitZone.style.bottom = '100px';
     </script>
 </body>
 </html>
