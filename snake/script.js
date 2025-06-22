@@ -174,7 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (gameLoop) clearInterval(gameLoop);
         initGame();
         gameRunning = true;
-        gameSpeed = 150;
+        gameSpeed = 200;
         gameLoop = setInterval(gameUpdate, gameSpeed);
     }
     
