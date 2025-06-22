@@ -1,221 +1,226 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>钢琴块小游戏</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            height: 100vh;
-            overflow: hidden;
-        }
-        
-        .game-container {
-            width: 300px;
-            height: 500px;
-            background-color: #222;
-            position: relative;
-            overflow: hidden;
-            border-radius: 10px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-        }
-        
-        .piano-key {
-            position: absolute;
-            bottom: 0;
-            transition: background-color 0.1s;
-            cursor: pointer;
-        }
-        
-        .piano-key.white {
-            width: 75px;
-            height: 100px;
-            background-color: #fff;
-            z-index: 1;
-            border: 1px solid #ddd;
-        }
-        
-        .piano-key.black {
-            width: 40px;
-            height: 60px;
-            background-color: #111;
-            z-index: 2;
-        }
-        
-        .piano-key.active {
-            background-color: #4CAF50;
-        }
-        
-        .piano-key.black.active {
-            background-color: #2E7D32;
-        }
-        
-        .falling-block {
-            position: absolute;
-            height: 20px;
-            background-color: #4CAF50;
-            z-index: 3;
-            border-radius: 3px;
-        }
-        
-        .falling-block.white-target {
-            width: 75px;
-        }
-        
-        .falling-block.black-target {
-            width: 40px;
-        }
-        
-        .hit-zone {
-            position: absolute;
-            width: 100%;
-            height: 40px;
-            bottom: 100px;
-            background-color: rgba(255, 255, 0, 0.2);
-            z-index: 4;
-            pointer-events: none;
-        }
-        
-        .score-display {
-            margin-top: 20px;
-            font-size: 24px;
-            color: #333;
-        }
-        
-        .start-button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 18px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        
-        .start-button:hover {
-            background-color: #2E7D32;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>钢琴块小游戏</title>
+<style>
+body {
+margin: 0;
+padding: 0;
+font-family: Arial, sans-serif;
+background-color: #f0f0f0;
+display: flex;
+flex-direction: column;
+align-items: center;
+height: 100vh;
+overflow: hidden;
+}
+
+.game-container {
+width: 300px;
+height: 500px;
+background-color: #222;
+position: relative;
+overflow: hidden;
+border-radius: 10px;
+box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+}
+
+.piano-key {
+position: absolute;
+bottom: 0;
+transition: background-color 0.1s;
+cursor: pointer;
+}
+
+.piano-key.white {
+width: 75px;
+height: 100px;
+background-color: #fff;
+z-index: 1;
+border: 1px solid #ddd;
+}
+
+.piano-key.black {
+width: 40px;
+height: 60px;
+background-color: #111;
+z-index: 2;
+}
+
+.piano-key.active {
+background-color: #4CAF50;
+}
+
+.piano-key.black.active {
+background-color: #2E7D32;
+}
+
+.falling-block {
+position: absolute;
+height: 20px;
+background-color: #4CAF50;
+z-index: 3;
+border-radius: 3px;
+}
+
+.falling-block.white-target {
+width: 75px;
+}
+
+.falling-block.black-target {
+width: 40px;
+}
+
+.hit-zone {
+position: absolute;
+width: 100%;
+height: 40px;
+bottom: 100px;
+background-color: rgba(255, 255, 0, 0.2);
+z-index: 4;
+pointer-events: none;
+}
+
+.score-display {
+margin-top: 20px;
+font-size: 24px;
+color: #333;
+}
+
+.start-button {
+margin-top: 20px;
+padding: 10px 20px;
+background-color: #4CAF50;
+color: white;
+border: none;
+border-radius: 5px;
+font-size: 18px;
+cursor: pointer;
+transition: background-color 0.3s;
+}
+
+.start-button:hover {
+background-color: #2E7D32;
+}
+</style>
 </head>
 <body>
-    <h1>钢琴块小游戏</h1>
-    <div class="score-display">得分: <span id="score">0</span></div>
-    <div class="game-container" id="gameContainer">
-        <!-- 钢琴键布局 -->
-        <div class="piano-key white" data-note="C" style="left: 0px;"></div>
-        <div class="piano-key black" data-note="C#" style="left: 55px;"></div>
-        <div class="piano-key white" data-note="D" style="left: 75px;"></div>
-        <div class="piano-key black" data-note="D#" style="left: 130px;"></div>
-        <div class="piano-key white" data-note="E" style="left: 150px;"></div>
-        <div class="piano-key white" data-note="F" style="left: 225px;"></div>
-        
-        <!-- 命中区域指示 -->
-        <div class="hit-zone" id="hitZone"></div>
-    </div>
-    <button class="start-button" id="startButton">开始游戏</button>
+<h1>钢琴块小游戏</h1>
+<div class="score-display">得分: <span id="score">0</span></div>
+<div class="game-container" id="gameContainer">
+<!-- 钢琴键布局 -->
+<div class="piano-key white" data-note="C" style="left: 0px;"></div>
+<div class="piano-key black" data-note="C#" style="left: 55px;"></div>
+<div class="piano-key white" data-note="D" style="left: 75px;"></div>
+<div class="piano-key black" data-note="D#" style="left: 130px;"></div>
+<div class="piano-key white" data-note="E" style="left: 150px;"></div>
+<div class="piano-key white" data-note="F" style="left: 225px;"></div>
 
-    <script>
-        const gameContainer = document.getElementById('gameContainer');
-        const startButton = document.getElementById('startButton');
-        const scoreDisplay = document.getElementById('score');
-        const pianoKeys = document.querySelectorAll('.piano-key');
-        const hitZone = document.getElementById('hitZone');
-        const notes = ['C', 'C#', 'D', 'D#', 'E', 'F'];
+<!-- 命中区域指示 -->
+<div class="hit-zone" id="hitZone"></div>
+</div>
+<button class="start-button" id="startButton">开始游戏</button>
+
+<script>
+const gameContainer = document.getElementById('gameContainer');
+const startButton = document.getElementById('startButton');
+const scoreDisplay = document.getElementById('score');
+const pianoKeys = document.querySelectorAll('.piano-key');
+const hitZone = document.getElementById('hitZone');
+const notes = ['C', 'C#', 'D', 'D#', 'E', 'F'];
+
+let score = 0;
+let gameActive = false;
+let animationId;
+let blocks = [];
+let blockSpeed = 2;
+let blockInterval = 1500;
+let lastBlockTime = 0;
+let keyPositions = {};
+
+// 命中区域参数
+const HIT_ZONE_HEIGHT = 70;
+const HIT_ZONE_TOP = gameContainer.offsetHeight - 100 - HIT_ZONE_HEIGHT;
+
+// 初始化音频上下文
+const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+// 播放音符函数
+function playNote(note) {
+const oscillator = audioContext.createOscillator();
+const gainNode = audioContext.createGain();
+
+oscillator.type = 'sine';
+oscillator.frequency.value = getNoteFrequency(note);
+
+gainNode.gain.value = 0.1;
+gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+
+oscillator.connect(gainNode);
+gainNode.connect(audioContext.destination);
+
+oscillator.start();
+oscillator.stop(audioContext.currentTime + 0.5);
+}
+
+// 获取音符频率
+function getNoteFrequency(note) {
+const frequencies = {
+'C': 261.63,
+'C#': 277.18,
+'D': 293.66,
+'D#': 311.13,
+'E': 329.63,
+'F': 349.23
+};
+return frequencies[note];
+}
+
+// 初始化钢琴键位置信息
+function initKeyPositions() {
+pianoKeys.forEach(key => {
+const rect = key.getBoundingClientRect();
+const containerRect = gameContainer.getBoundingClientRect();
+
+keyPositions[key.dataset.note] = {
+left: rect.left - containerRect.left,
+width: rect.width,
+isBlack: key.classList.contains('black')
+};
+});
+}
+
+// 创建下落方块
+function createBlock() {
+const block = document.createElement('div');
+
+// 随机选择一个音符
+const randomNoteIndex = Math.floor(Math.random() * notes.length);
+const note = notes[randomNoteIndex];
+const keyInfo = keyPositions[note];
+
+block.dataset.note = note;
+block.className = `falling-block ${keyInfo.isBlack ? 'black-target' : 'white-target'}`;
+block.style.left = `${keyInfo.left}px`;
+block.style.top = '0';
+
+gameContainer.appendChild(block);
+blocks.push({
+element: block,
+note: note,
+left: keyInfo.left,
+width: keyInfo.width,
+isBlack: keyInfo.isBlack,
+hit: false
+});
+}
         
-        let score = 0;
-        let gameActive = false;
-        let animationId;
-        let blocks = [];
-        let blockSpeed = 2;
-        let blockInterval = 1500;
-        let lastBlockTime = 0;
-        let keyPositions = {};
-        
-        // 命中区域参数
-        const HIT_ZONE_HEIGHT = 70;
-        const HIT_ZONE_TOP = gameContainer.offsetHeight - 100 - HIT_ZONE_HEIGHT;
-        
-        // 初始化音频上下文
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        
-        // 播放音符函数
-        function playNote(note) {
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
-            
-            oscillator.type = 'sine';
-            oscillator.frequency.value = getNoteFrequency(note);
-            
-            gainNode.gain.value = 0.1;
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
-            
-            oscillator.start();
-            oscillator.stop(audioContext.currentTime + 0.5);
-        }
-        
-        // 获取音符频率
-        function getNoteFrequency(note) {
-            const frequencies = {
-                'C': 261.63,
-                'C#': 277.18,
-                'D': 293.66,
-                'D#': 311.13,
-                'E': 329.63,
-                'F': 349.23
-            };
-            return frequencies[note];
-        }
-        
-        // 初始化钢琴键位置信息
-        function initKeyPositions() {
-            pianoKeys.forEach(key => {
-                const rect = key.getBoundingClientRect();
-                const containerRect = gameContainer.getBoundingClientRect();
-                
-                keyPositions[key.dataset.note] = {
-                    left: rect.left - containerRect.left,
-                    width: rect.width,
-                    isBlack: key.classList.contains('black')
-                };
-            });
-        }
-        
-        // 创建下落方块
-        function createBlock() {
+        // 更新方块位置
+        function updateBlocks() {
+            const currentTime = Date.now();
             const block = document.createElement('div');
-            
-            // 随机选择一个音符
-            const randomNoteIndex = Math.floor(Math.random() * notes.length);
-            const note = notes[randomNoteIndex];
-            const keyInfo = keyPositions[note];
-            
-            block.dataset.note = note;
-            block.className = `falling-block ${keyInfo.isBlack ? 'black-target' : 'white-target'}`;
-            block.style.left = `${keyInfo.left}px`;
-            block.style.top = '0';
-            
-            gameContainer.appendChild(block);
-            blocks.push({
-                element: block,
-                note: note,
-                left: keyInfo.left,
-                width: keyInfo.width,
-                isBlack: keyInfo.isBlack,
-                hit: false
-            });
-        }
         // 在游戏变量区域添加
 const BLOCK_DROP_INTERVAL = 800; // 方块下落间隔时间(毫秒)
 let lastDropTime = 0;
@@ -237,52 +242,53 @@ function gameLoop(timestamp) {
 // 修改方块创建函数
 function createBlock() {
     const block = document.createElement('div');
-    
-    // 随机选择一个音符
-    const randomNoteIndex = Math.floor(Math.random() * notes.length);
-    const note = notes[randomNoteIndex];
-    const keyInfo = keyPositions[note];
-    
-    // 判断是大方块还是小方块
-    const isBigBlock = !keyInfo.isBlack;
-    
-    // 设置方块文字内容
-    const smallTexts = ["老婆", "真爱", "真棒", "爱你", "亲亲", "么么"];
-    const bigTexts = ["爱你老婆", "燕子你最棒", "白头偕老", "老婆暴富", "一生一世", "永远爱你"];
-    const randomText = isBigBlock ? 
-        bigTexts[Math.floor(Math.random() * bigTexts.length)] :
-        smallTexts[Math.floor(Math.random() * smallTexts.length)];
-    
-    block.dataset.note = note;
-    block.className = `falling-block ${keyInfo.isBlack ? 'black-target' : 'white-target'}`;
-    block.style.left = `${keyInfo.left}px`;
-    block.style.top = '0';
-    
-    // 添加文字元素
-    const textSpan = document.createElement('span');
-    textSpan.textContent = randomText;
-    textSpan.style.color = keyInfo.isBlack ? '#fff' : '#000';
-    textSpan.style.position = 'absolute';
-    textSpan.style.width = '100%';
-    textSpan.style.textAlign = 'center';
-    textSpan.style.fontSize = isBigBlock ? '14px' : '12px';
-    textSpan.style.fontWeight = 'bold';
-    textSpan.style.top = '50%';
-    textSpan.style.left = '50%';
-    textSpan.style.transform = 'translate(-50%, -50%)';
-    
-    block.appendChild(textSpan);
-    gameContainer.appendChild(block);
-    
-    blocks.push({
-        element: block,
-        note: note,
-        left: keyInfo.left,
-        width: keyInfo.width,
-        isBlack: keyInfo.isBlack,
+
+// 随机选择一个音符
+const randomNoteIndex = Math.floor(Math.random() * notes.length);
+const note = notes[randomNoteIndex];
+const keyInfo = keyPositions[note];
+
+// 判断是大方块还是小方块
+const isBigBlock = !keyInfo.isBlack;
+
+// 设置方块文字内容
+const smallTexts = ["老婆", "真爱", "真棒", "爱你", "亲亲", "么么"];
+const bigTexts = ["爱你老婆", "燕子你最棒", "白头偕老", "老婆暴富", "一生一世", "永远爱你"];
+const randomText = isBigBlock ? 
+bigTexts[Math.floor(Math.random() * bigTexts.length)] :
+smallTexts[Math.floor(Math.random() * smallTexts.length)];
+
+block.dataset.note = note;
+block.className = `falling-block ${keyInfo.isBlack ? 'black-target' : 'white-target'}`;
+block.style.left = `${keyInfo.left}px`;
+block.style.top = '0';
+
+// 添加文字元素
+const textSpan = document.createElement('span');
+textSpan.textContent = randomText;
+textSpan.style.color = keyInfo.isBlack ? '#fff' : '#000';
+textSpan.style.position = 'absolute';
+textSpan.style.width = '100%';
+textSpan.style.textAlign = 'center';
+textSpan.style.fontSize = isBigBlock ? '14px' : '12px';
+textSpan.style.fontWeight = 'bold';
+textSpan.style.top = '50%';
+textSpan.style.left = '50%';
+textSpan.style.transform = 'translate(-50%, -50%)';
+
+block.appendChild(textSpan);
+gameContainer.appendChild(block);
+
+blocks.push({
+element: block,
+note: note,
+left: keyInfo.left,
+width: keyInfo.width,
+isBlack: keyInfo.isBlack,
+        hit: false
         hit: false,
         inHitZone: false
-    });
+});
 }
 
 // 方块更新函数
@@ -320,124 +326,123 @@ function startGame() {
         function updateBlocks() {
             const currentTime = Date.now();
 
-            // 定期生成新方块
-            if (currentTime - lastBlockTime > blockInterval && gameActive) {
-                createBlock();
-                lastBlockTime = currentTime;
-                
-                // 随着游戏进行加快方块生成速度
-                if (score > 0 && score % 5 === 0 && blockInterval > 800) {
-                    blockInterval -= 50;
-                }
-            }
-            
-            // 移动所有方块
-            for (let i = blocks.length - 1; i >= 0; i--) {
-                const block = blocks[i];
-                const currentTop = parseInt(block.element.style.top);
-                const newTop = currentTop + blockSpeed;
-                block.element.style.top = `${newTop}px`;
-                
-                // 检查是否进入命中区域
-                if (!block.hit && newTop >= HIT_ZONE_TOP && newTop <= HIT_ZONE_TOP + HIT_ZONE_HEIGHT) {
-                    block.inHitZone = true;
-                } else if (newTop > HIT_ZONE_TOP + HIT_ZONE_HEIGHT) {
-                    block.inHitZone = false;
-                }
-                
-                // 检查是否到达底部
-                if (newTop >= gameContainer.offsetHeight) {
-                    // 如果方块到达底部但未被点击，游戏结束
-                    if (!block.hit) {
-                        endGame();
-                        return;
-                    }
-                    
-                    // 移除已点击的方块
-                    block.element.remove();
-                    blocks.splice(i, 1);
-                }
-            }
-            
-            animationId = requestAnimationFrame(updateBlocks);
-        }
-        
-        // 开始游戏
-        function startGame() {
-            if (gameActive) return;
-            
-            gameActive = true;
-            score = 0;
-            scoreDisplay.textContent = score;
-            blocks = [];
-            blockSpeed = 2;
-            blockInterval = 1500;
-            lastBlockTime = Date.now();
-            
-            // 初始化钢琴键位置
-            initKeyPositions();
-            
-            // 清除所有现有方块
-            document.querySelectorAll('.falling-block').forEach(block => block.remove());
-            
-            startButton.textContent = '游戏中...';
-            updateBlocks();
-        }
-        
-        // 结束游戏
-        function endGame() {
-            gameActive = false;
-            cancelAnimationFrame(animationId);
-            startButton.textContent = '重新开始';
-            
-            alert(`游戏结束! 你的得分是: ${score}`);
-        }
-         
-        // 点击钢琴键
-        pianoKeys.forEach(key => {
-            key.addEventListener('mousedown', () => {
-                if (!gameActive) return;
-                
-                const note = key.dataset.note;
-                playNote(note);
-                key.classList.add('active');
-                
-                // 检查是否有方块可以被点击
-                for (let i = 0; i < blocks.length; i++) {
-                    const block = blocks[i];
-                    
-                    // 如果方块与钢琴键匹配且在命中区域内
-                    if (!block.hit && block.note === note && block.inHitZone) {
-                        // 标记为已点击
-                        block.hit = true;
-                        block.element.classList.add('hit');
-                        block.element.style.backgroundColor = '#FF9800';
-                        
-                        // 增加分数
-                        score++;
-                        scoreDisplay.textContent = score;
-                        
-                        // 随着分数增加加快下落速度
-                        if (score % 3 === 0) {
-                            blockSpeed += 0.2;
-                        }
-                        
-                        break;
-                    }
-                }
-            });
-            
-            key.addEventListener('mouseup', () => {
-                key.classList.remove('active');
-            });
-        });
-       
-</div>
-        // 开始游戏按钮
-        startButton.addEventListener('click', startGame);
-        
-        // 初始化命中区域位置
-        hitZone.style.bottom = '100px';
-    </script>
+// 定期生成新方块
+if (currentTime - lastBlockTime > blockInterval && gameActive) {
+createBlock();
+lastBlockTime = currentTime;
+
+// 随着游戏进行加快方块生成速度
+if (score > 0 && score % 5 === 0 && blockInterval > 800) {
+blockInterval -= 50;
+}
+}
+
+// 移动所有方块
+for (let i = blocks.length - 1; i >= 0; i--) {
+const block = blocks[i];
+const currentTop = parseInt(block.element.style.top);
+const newTop = currentTop + blockSpeed;
+block.element.style.top = `${newTop}px`;
+
+// 检查是否进入命中区域
+if (!block.hit && newTop >= HIT_ZONE_TOP && newTop <= HIT_ZONE_TOP + HIT_ZONE_HEIGHT) {
+block.inHitZone = true;
+} else if (newTop > HIT_ZONE_TOP + HIT_ZONE_HEIGHT) {
+block.inHitZone = false;
+}
+
+// 检查是否到达底部
+if (newTop >= gameContainer.offsetHeight) {
+// 如果方块到达底部但未被点击，游戏结束
+if (!block.hit) {
+endGame();
+return;
+}
+
+// 移除已点击的方块
+block.element.remove();
+blocks.splice(i, 1);
+}
+}
+
+animationId = requestAnimationFrame(updateBlocks);
+}
+
+// 开始游戏
+function startGame() {
+if (gameActive) return;
+
+gameActive = true;
+score = 0;
+scoreDisplay.textContent = score;
+blocks = [];
+blockSpeed = 2;
+blockInterval = 1500;
+lastBlockTime = Date.now();
+
+// 初始化钢琴键位置
+initKeyPositions();
+
+// 清除所有现有方块
+document.querySelectorAll('.falling-block').forEach(block => block.remove());
+
+startButton.textContent = '游戏中...';
+updateBlocks();
+}
+
+// 结束游戏
+function endGame() {
+gameActive = false;
+cancelAnimationFrame(animationId);
+startButton.textContent = '重新开始';
+
+alert(`游戏结束! 你的得分是: ${score}`);
+}
+
+// 点击钢琴键
+pianoKeys.forEach(key => {
+key.addEventListener('mousedown', () => {
+if (!gameActive) return;
+
+const note = key.dataset.note;
+playNote(note);
+key.classList.add('active');
+
+// 检查是否有方块可以被点击
+for (let i = 0; i < blocks.length; i++) {
+const block = blocks[i];
+
+// 如果方块与钢琴键匹配且在命中区域内
+if (!block.hit && block.note === note && block.inHitZone) {
+// 标记为已点击
+block.hit = true;
+block.element.classList.add('hit');
+block.element.style.backgroundColor = '#FF9800';
+
+// 增加分数
+score++;
+scoreDisplay.textContent = score;
+
+// 随着分数增加加快下落速度
+if (score % 3 === 0) {
+blockSpeed += 0.2;
+}
+
+break;
+}
+}
+});
+
+key.addEventListener('mouseup', () => {
+key.classList.remove('active');
+});
+});
+
+// 开始游戏按钮
+startButton.addEventListener('click', startGame);
+
+// 初始化命中区域位置
+hitZone.style.bottom = '100px';
+</script>
 </body>
 </html>
