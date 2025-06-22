@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let nextDirection = 'right';
     let gameRunning = false;
     let score = 0;
-    let gameSpeed = 250;
+    let gameSpeed = 350;
     let gameLoop = null;
     
     // 初始化游戏
@@ -174,7 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (gameLoop) clearInterval(gameLoop);
         initGame();
         gameRunning = true;
-        gameSpeed = 250;
+        gameSpeed = 300;
         gameLoop = setInterval(gameUpdate, gameSpeed);
     }
     
