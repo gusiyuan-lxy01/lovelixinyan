@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub 附件图片显示</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+        button {
+            background: #0366d6;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        #preview {
+            margin-top: 20px;
+            text-align: center;
+        }
+        #preview img {
+            max-width: 100%;
+            border: 1px solid #ddd;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>GitHub 附件图片显示工具</h1>
+    
+    <div>
+        <p>1. 粘贴 GitHub 附件 Markdown 链接（例如 <code>![image](https://github.com/user-attachments/assets/xxx)</code>）：</p>
+        <textarea id="markdownInput" placeholder="粘贴链接..."></textarea>
+        <button onclick="showImage()">显示图片</button>
+    </div>
+
+    <div id="preview">
+        <p>图片预览：</p>
+        <!-- 图片动态加载到这里 -->
+    </div>
+
+    <script>
+        function showImage() {
+            const markdown = document.getElementById("markdownInput").value.trim();
+            const previewDiv = document.getElementById("preview");
+
+            // 清空旧内容
+            previewDiv.innerHTML = "<p>图片预览：</p>";
+
+            // 提取 URL（支持两种格式）
+            let imageUrl;
+            if (markdown.startsWith("https://")) {
+                // 直接是 URL
+                imageUrl = markdown;
+            } else {
+                // 从 Markdown 提取
+                const matches = markdown.match(/!\[.*?\]\((.*?)\)/);
+                if (!matches || !matches[1]) {
+                    previewDiv.innerHTML += `<p class="error">❌ 无效格式！请使用：<code>![text](url)</code> 或直接粘贴 URL</p>`;
+                    return;
+                }
+                imageUrl = matches[1];
+            }
+
+            // 处理 GitHub 附件链接（转换为 raw 格式）
+            if (imageUrl.includes("github.com/user-attachments/assets/")) {
+                imageUrl = imageUrl.replace(
+                    "github.com/user-attachments/assets/",
+                    "raw.githubusercontent.com/user-attachments/assets/"
+                );
+            }
+
+            // 显示图片
+            previewDiv.innerHTML += `
+                <img src="${imageUrl}" alt="GitHub 图片" onerror="this.parentNode.innerHTML += '<p class=\"error\">❌ 图片加载失败！请检查链接是否有效</p>'">
+                <p><small>图片 URL: <code>${imageUrl}</code></small></p>
+            `;
+        }
+    </script>
+</body>
+</html>
