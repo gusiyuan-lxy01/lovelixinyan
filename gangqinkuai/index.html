@@ -392,7 +392,11 @@ function startGame() {
             
             alert(`游戏结束! 你的得分是: ${score}`);
         }
-        
+         <div id="game-over-modal" class="modal">
+    <div class="modal-content">
+        <p>不过是些许风霜，我相信老婆下次会更优秀的！</p>
+        <button id="restart-btn">再试一次</button>
+    </div>
         // 点击钢琴键
         pianoKeys.forEach(key => {
             key.addEventListener('mousedown', () => {
@@ -431,11 +435,7 @@ function startGame() {
                 key.classList.remove('active');
             });
         });
-        <div id="game-over-modal" class="modal">
-    <div class="modal-content">
-        <p>不过是些许风霜，我相信老婆下次会更优秀的！</p>
-        <button id="restart-btn">再试一次</button>
-    </div>
+       
 </div>
         // 开始游戏按钮
         startButton.addEventListener('click', startGame);
