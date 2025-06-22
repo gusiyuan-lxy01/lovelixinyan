@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let nextDirection = 'right';
     let gameRunning = false;
     let score = 0;
-    let gameSpeed = 150;
+    let gameSpeed = 250;
     let gameLoop = null;
     
     // 初始化游戏
