@@ -216,11 +216,27 @@
                 hit: false
             });
         }
-        
-        // 更新方块位置
-        function updateBlocks() {
-            const currentTime = Date.now();
-            const block = document.createElement('div');
+        // 在游戏变量区域添加
+const BLOCK_DROP_INTERVAL = 800; // 方块下落间隔时间(毫秒)
+let lastDropTime = 0;
+
+// 修改游戏主循环
+function gameLoop(timestamp) {
+    // 检查是否到了该下落新方块的时机
+    if (timestamp - lastDropTime > BLOCK_DROP_INTERVAL) {
+        createBlock();
+        lastDropTime = timestamp;
+    }
+
+    // 更新已有方块位置
+    updateBlocks();
+    
+    requestAnimationFrame(gameLoop);
+}
+
+// 修改方块创建函数
+function createBlock() {
+    const block = document.createElement('div');
     
     // 随机选择一个音符
     const randomNoteIndex = Math.floor(Math.random() * notes.length);
@@ -264,8 +280,46 @@
         left: keyInfo.left,
         width: keyInfo.width,
         isBlack: keyInfo.isBlack,
-        hit: false
+        hit: false,
+        inHitZone: false
     });
+}
+
+// 方块更新函数
+function updateBlocks() {
+    const hitZoneTop = gameContainer.offsetHeight - HIT_ZONE_HEIGHT;
+    
+    for (let i = blocks.length - 1; i >= 0; i--) {
+        const block = blocks[i];
+        const currentTop = parseInt(block.element.style.top) || 0;
+        const newTop = currentTop + blockSpeed;
+        
+        block.element.style.top = `${newTop}px`;
+        
+        // 更新是否在命中区域的状态
+        block.inHitZone = newTop >= hitZoneTop && newTop <= gameContainer.offsetHeight;
+        
+        // 移除超出屏幕的方块
+        if (newTop > gameContainer.offsetHeight) {
+            if (!block.hit) {
+                // 方块未被点击就消失了，可以处理为miss
+                missBlock();
+            }
+            block.element.remove();
+            blocks.splice(i, 1);
+        }
+    }
+}
+
+// 游戏启动
+function startGame() {
+    lastDropTime = performance.now();
+    requestAnimationFrame(gameLoop);
+}
+        // 更新方块位置
+        function updateBlocks() {
+            const currentTime = Date.now();
+
             // 定期生成新方块
             if (currentTime - lastBlockTime > blockInterval && gameActive) {
                 createBlock();
