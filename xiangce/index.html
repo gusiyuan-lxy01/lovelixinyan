@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>手机照片展示页</title>
+    <title>手机竖屏照片展示</title>
     <style>
         :root {
             --primary-color: #4285f4;
@@ -35,7 +35,7 @@
         
         .gallery {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             gap: 20px;
             padding: 10px;
         }
@@ -47,17 +47,7 @@
             box-shadow: var(--shadow);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             background: white;
-            aspect-ratio: 4/3; /* 默认使用4:3比例，适合大多数手机照片 */
-        }
-        
-        /* 16:9比例的图片容器 */
-        .image-container.widescreen {
-            aspect-ratio: 16/9;
-        }
-        
-        /* 正方形图片容器 */
-        .image-container.square {
-            aspect-ratio: 1/1;
+            aspect-ratio: 9/16; /* 统一使用手机竖屏比例9:16 */
         }
         
         .image-container:hover {
@@ -97,50 +87,55 @@
         @media (max-width: 480px) {
             .gallery {
                 grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .image-container {
+                aspect-ratio: 2/3; /* 在小屏幕上使用稍宽的比例 */
             }
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>手机照片画廊</h1>
-        <p>按原始比例展示手机拍摄照片</p>
+        <h1>手机竖屏照片</h1>
+        <p>统一按9:16比例展示</p>
     </header>
     
     <div class="gallery">
-        <!-- 4:3比例照片（默认） -->
+        <!-- 照片1 -->
         <div class="image-container">
-            <img src="https://i.ibb.co/4ZhjbMHp/mmexport1750324204762.jpg" alt="👴">
+            <img src="https://i.ibb.co/4ZhjbMHp/mmexport1750324204762.jpg" alt="竖屏照片1">
             <div class="image-info">
-                <h3>刚出院的爷爷</h3>
-                <p>大多数手机默认比例</p>
+                <h3>风景照片</h3>
+                <p>2023年拍摄</p>
             </div>
         </div>
         
-        <!-- 16:9比例照片 -->
-        <div class="image-container widescreen">
-            <img src="https://i.ibb.co/abc123/example2.jpg" alt="示例图片2">
-            <div class="image-info">
-                <h3>16:9比例照片</h3>
-                <p>适合横向拍摄</p>
-            </div>
-        </div>
-        
-        <!-- 正方形照片 -->
-        <div class="image-container square">
-            <img src="https://i.ibb.co/def456/example3.jpg" alt="示例图片3">
-            <div class="image-info">
-                <h3>1:1比例照片</h3>
-                <p>正方形构图</p>
-            </div>
-        </div>
-        
-        <!-- 另一个4:3比例照片 -->
+        <!-- 照片2 -->
         <div class="image-container">
-            <img src="https://i.ibb.co/ghi789/example4.jpg" alt="示例图片4">
+            <img src="https://i.ibb.co/abc123/example2.jpg" alt="竖屏照片2">
             <div class="image-info">
-                <h3>竖拍照片</h3>
-                <p>保持原始比例</p>
+                <h3>人像照片</h3>
+                <p>2023年拍摄</p>
+            </div>
+        </div>
+        
+        <!-- 照片3 -->
+        <div class="image-container">
+            <img src="https://i.ibb.co/def456/example3.jpg" alt="竖屏照片3">
+            <div class="image-info">
+                <h3>建筑照片</h3>
+                <p>2023年拍摄</p>
+            </div>
+        </div>
+        
+        <!-- 照片4 -->
+        <div class="image-container">
+            <img src="https://i.ibb.co/ghi789/example4.jpg" alt="竖屏照片4">
+            <div class="image-info">
+                <h3>街拍照片</h3>
+                <p>2023年拍摄</p>
             </div>
         </div>
     </div>
