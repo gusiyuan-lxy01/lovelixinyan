@@ -131,6 +131,26 @@
     99% { transform: scaleX(-1); }
     100% { left: -80px; transform: scaleX(1); }
   }
+    /* ✅ 新增的名言样式 */
+        .quote-box {
+            margin: 20px auto;
+            padding: 15px;
+            max-width: 600px;
+            background: #f8f9fa;
+            border-left: 4px solid #0366d6;
+            border-radius: 4px;
+        }
+        .quote-text { font-style: italic; color: #333; }
+        .quote-author { text-align: right; font-weight: bold; color: #666; }
+        .refresh-btn {
+            margin: 10px auto;
+            padding: 5px 10px;
+            background: #0366d6;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
 </style>
 
 <div class="runner-container">
@@ -213,6 +233,28 @@
   </style>
 </head>
 <body>
+  <!-- ✅ 新增的名言容器 -->
+    <div class="quote-box">
+        <div class="quote-text" id="quote-text">加载中...</div>
+        <div class="quote-author" id="quote-author"></div>
+        <button class="refresh-btn" onclick="loadRandomQuote()">换一句</button>
+    </div>
+
+    <script>
+        // ✅ 新增的名言逻辑
+        function loadRandomQuote() {
+            const quotes = [
+                { text: "Stay hungry, stay foolish.", author: "Steve Jobs" },
+                { text: "代码写得好，bug 少一半。", author: "匿名程序员" }
+                // 添加更多名言...
+            ];
+            const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+            document.getElementById('quote-text').textContent = `"${randomQuote.text}"`;
+            document.getElementById('quote-author').textContent = `— ${randomQuote.author}`;
+        }
+
+        // 页面加载时显示
+        window.onload = loadRandomQuote;
   <!-- 新标题 -->
   <h1 class="welcome-title">李新燕的私人网站</h1>
   
