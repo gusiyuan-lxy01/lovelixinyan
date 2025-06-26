@@ -83,30 +83,6 @@
             transform: translateY(0);
         }
         
-        .upload-section {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: var(--shadow);
-            margin-bottom: 30px;
-            text-align: center;
-        }
-        
-        .upload-btn {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
-        }
-        
-        .upload-btn:hover {
-            background-color: #3367d6;
-        }
-        
         @media (max-width: 768px) {
             .gallery {
                 grid-template-columns: repeat(2, 1fr);
@@ -123,95 +99,68 @@
 <body>
     <header>
         <h1>我的图片画廊</h1>
-        <p>展示来自ImgBB的图片收藏</p>
+        <p>精选图片展示</p>
     </header>
     
-    <div class="upload-section">
-        <h2>上传新图片</h2>
-        <p>将图片上传到ImgBB后，在此处添加链接</p>
-        <button class="upload-btn" onclick="addNewImage()">添加图片</button>
-    </div>
-    
     <div class="gallery" id="imageGallery">
-        <!-- 图片将通过JavaScript动态添加 -->
-        <!-- 示例图片1 -->
+        <!-- 图片1 -->
         <div class="image-container">
-            <img src="https://i.ibb.co/wN5KnCf/example1.jpg" alt="示例图片1">
+            <img src="https://i.ibb.co/4ZhjbMHp/mmexport1750324204762.jpg" alt="👴" loading="lazy">
             <div class="image-info">
-                <h3>图片标题1</h3>
-                <p>2023-10-15</p>
+                <h3>爷爷的相册</h3>
+                <p>拍摄于2025年</p>
             </div>
         </div>
         
-        <!-- 示例图片2 -->
+        <!-- 图片2 -->
         <div class="image-container">
-            <img src="https://i.ibb.co/abc123/example2.jpg" alt="示例图片2">
+            <img src="https://i.ibb.co/abc123/example2.jpg" alt="示例图片2" loading="lazy">
             <div class="image-info">
-                <h3>图片标题2</h3>
-                <p>2023-10-16</p>
+                <h3>城市夜景</h3>
+                <p>拍摄于2022年</p>
             </div>
         </div>
         
-        <!-- 可以继续添加更多图片容器 -->
+        <!-- 图片3 -->
+        <div class="image-container">
+            <img src="https://i.ibb.co/def456/example3.jpg" alt="示例图片3" loading="lazy">
+            <div class="image-info">
+                <h3>自然风光</h3>
+                <p>拍摄于2021年</p>
+            </div>
+        </div>
+        
+        <!-- 图片4 -->
+        <div class="image-container">
+            <img src="https://i.ibb.co/ghi789/example4.jpg" alt="示例图片4" loading="lazy">
+            <div class="image-info">
+                <h3>人文纪实</h3>
+                <p>拍摄于2020年</p>
+            </div>
+        </div>
     </div>
     
     <script>
-        // 图片数据数组 - 可以替换为你的实际图片数据
-        const imageData = [
-            {
-                url: "https://i.ibb.co/wN5KnCf/example1.jpg",
-                title: "示例图片1",
-                date: "2023-10-15"
-            },
-            {
-                url: "https://i.ibb.co/abc123/example2.jpg",
-                title: "示例图片2",
-                date: "2023-10-16"
-            },
-            // 可以添加更多图片数据
-        ];
-        
-        // 初始化画廊
-        function initGallery() {
-            const gallery = document.getElementById('imageGallery');
-            gallery.innerHTML = ''; // 清空现有内容
+        // 图片懒加载优化
+        document.addEventListener("DOMContentLoaded", function() {
+            const lazyImages = [].slice.call(document.querySelectorAll("img[loading='lazy']"));
             
-            imageData.forEach(img => {
-                const imageContainer = document.createElement('div');
-                imageContainer.className = 'image-container';
-                
-                imageContainer.innerHTML = `
-                    <img src="${img.url}" alt="${img.title}">
-                    <div class="image-info">
-                        <h3>${img.title}</h3>
-                        <p>${img.date}</p>
-                    </div>
-                `;
-                
-                gallery.appendChild(imageContainer);
-            });
-        }
-        
-        // 添加新图片函数
-        function addNewImage() {
-            const url = prompt("请输入ImgBB图片的直链URL:");
-            if (url) {
-                const title = prompt("请输入图片标题:");
-                const date = new Date().toISOString().split('T')[0];
-                
-                imageData.push({
-                    url: url,
-                    title: title || "未命名图片",
-                    date: date
+            if ("IntersectionObserver" in window) {
+                let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+                    entries.forEach(function(entry) {
+                        if (entry.isIntersecting) {
+                            let lazyImage = entry.target;
+                            lazyImage.src = lazyImage.dataset.src;
+                            lazyImageObserver.unobserve(lazyImage);
+                        }
+                    });
                 });
                 
-                initGallery(); // 重新渲染画廊
-                alert("图片已添加!");
+                lazyImages.forEach(function(lazyImage) {
+                    lazyImageObserver.observe(lazyImage);
+                });
             }
-        }
-        
-        // 页面加载时初始化画廊
-        window.onload = initGallery;
+        });
     </script>
 </body>
 </html>
