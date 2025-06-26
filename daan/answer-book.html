@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>答案之书</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #f5f0e8;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            color: #8b4513;
+            border-bottom: 2px solid #d2b48c;
+            padding-bottom: 10px;
+        }
+        .input-area {
+            margin: 30px 0;
+        }
+        #question {
+            width: 80%;
+            padding: 12px;
+            border: 2px solid #d2b48c;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        #answer-btn {
+            margin-top: 20px;
+            padding: 12px 30px;
+            background: #d2b48c;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        #answer-btn:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+        }
+        #answer-btn.active {
+            background: #8b4513;
+            transform: scale(1.05);
+        }
+        .answer-container {
+            margin-top: 40px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            min-height: 150px;
+            display: none;
+        }
+        .page-number {
+            font-size: 14px;
+            color: #8b4513;
+            margin-bottom: 10px;
+        }
+        .answer-text {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+        .book-cover {
+            width: 150px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <img src="https://via.placeholder.com/150x200/8b4513/ffffff?text=答案之书" alt="答案之书封面" class="book-cover">
+    <h1>答案之书</h1>
+    
+    <div class="input-area">
+        <input type="text" id="question" placeholder="在心中默念你的问题，然后输入到这里...">
+        <button id="answer-btn" disabled>翻开答案之书</button>
+    </div>
+    
+    <div class="answer-container" id="answer-container">
+        <div class="page-number">第 <span id="page-num">--</span> 页</div>
+        <div class="answer-text" id="answer-text">等待翻开答案...</div>
+    </div>
+
+    <script>
+        // 答案库（可自由扩展）
+        const answers = [
+            { page: 42, text: "是的，毫无疑问。" },
+            { page: 87, text: "时机未到，耐心等待。" },
+            { page: 13, text: "换个角度思考问题。" },
+            { page: 56, text: "结果会让你惊喜。" },
+            { page: 29, text: "不如把精力放在其他事情上。" },
+            { page: 101, text: "跟随你的直觉。" },
+            { page: 3, text: "答案就在你心里。" },
+            { page: 64, text: "这需要更多的努力。" },
+            { page: 118, text: "不要强求，顺其自然。" },
+            { page: 5, text: "问一个更明确的问题。" }
+        ];
+
+        // DOM 元素
+        const questionInput = document.getElementById('question');
+        const answerBtn = document.getElementById('answer-btn');
+        const answerContainer = document.getElementById('answer-container');
+        const pageNumElement = document.getElementById('page-num');
+        const answerTextElement = document.getElementById('answer-text');
+
+        // 输入框监听
+        questionInput.addEventListener('input', function() {
+            if (this.value.trim().length > 0) {
+                answerBtn.disabled = false;
+                answerBtn.classList.add('active');
+            } else {
+                answerBtn.disabled = true;
+                answerBtn.classList.remove('active');
+            }
+        });
+
+        // 按钮点击事件
+        answerBtn.addEventListener('click', function() {
+            if (questionInput.value.trim() === '') return;
+            
+            // 随机选择答案
+            const randomAnswer = answers[Math.floor(Math.random() * answers.length)];
+            
+            // 显示答案
+            pageNumElement.textContent = randomAnswer.page;
+            answerTextElement.textContent = randomAnswer.text;
+            answerContainer.style.display = 'block';
+            
+            // 动画效果
+            answerContainer.style.animation = 'none';
+            setTimeout(() => {
+                answerContainer.style.animation = 'fadeIn 0.5s';
+            }, 10);
+        });
+
+        // 添加简单动画
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(10px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
