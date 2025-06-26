@@ -60,11 +60,6 @@
             height: 100%;
             object-fit: cover;
             display: block;
-            transition: opacity 0.3s ease;
-        }
-        
-        .image-container:hover img {
-            opacity: 0.9;
         }
         
         .image-info {
@@ -75,12 +70,12 @@
             background: rgba(0, 0, 0, 0.6);
             color: white;
             padding: 10px;
-            transform: translateY(100%);
-            transition: transform 0.3s ease;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
         
         .image-container:hover .image-info {
-            transform: translateY(0);
+            opacity: 1;
         }
         
         @media (max-width: 768px) {
@@ -102,19 +97,19 @@
         <p>精选图片展示</p>
     </header>
     
-    <div class="gallery" id="imageGallery">
-        <!-- 图片1 -->
+    <div class="gallery">
+        <!-- 图片1 - 直接静态展示，确保不会消失 -->
         <div class="image-container">
-            <img src="https://i.ibb.co/4ZhjbMHp/mmexport1750324204762.jpg" alt="👴" loading="lazy">
+            <img src="https://i.ibb.co/4ZhjbMHp/mmexport1750324204762.jpg" alt="👴">
             <div class="image-info">
-                <h3>爷爷的相册</h3>
+                <h3>帅气的爷爷</h3>
                 <p>拍摄于2025年</p>
             </div>
         </div>
         
         <!-- 图片2 -->
         <div class="image-container">
-            <img src="https://i.ibb.co/abc123/example2.jpg" alt="示例图片2" loading="lazy">
+            <img src="https://i.ibb.co/abc123/example2.jpg" alt="示例图片2">
             <div class="image-info">
                 <h3>城市夜景</h3>
                 <p>拍摄于2022年</p>
@@ -123,7 +118,7 @@
         
         <!-- 图片3 -->
         <div class="image-container">
-            <img src="https://i.ibb.co/def456/example3.jpg" alt="示例图片3" loading="lazy">
+            <img src="https://i.ibb.co/def456/example3.jpg" alt="示例图片3">
             <div class="image-info">
                 <h3>自然风光</h3>
                 <p>拍摄于2021年</p>
@@ -132,35 +127,14 @@
         
         <!-- 图片4 -->
         <div class="image-container">
-            <img src="https://i.ibb.co/ghi789/example4.jpg" alt="示例图片4" loading="lazy">
+            <img src="https://i.ibb.co/ghi789/example4.jpg" alt="示例图片4">
             <div class="image-info">
                 <h3>人文纪实</h3>
                 <p>拍摄于2020年</p>
             </div>
         </div>
     </div>
-    
-    <script>
-        // 图片懒加载优化
-        document.addEventListener("DOMContentLoaded", function() {
-            const lazyImages = [].slice.call(document.querySelectorAll("img[loading='lazy']"));
-            
-            if ("IntersectionObserver" in window) {
-                let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
-                    entries.forEach(function(entry) {
-                        if (entry.isIntersecting) {
-                            let lazyImage = entry.target;
-                            lazyImage.src = lazyImage.dataset.src;
-                            lazyImageObserver.unobserve(lazyImage);
-                        }
-                    });
-                });
-                
-                lazyImages.forEach(function(lazyImage) {
-                    lazyImageObserver.observe(lazyImage);
-                });
-            }
-        });
-    </script>
+
+    <!-- 移除了所有可能导致图片消失的JavaScript代码 -->
 </body>
 </html>
