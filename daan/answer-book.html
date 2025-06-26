@@ -5,148 +5,272 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>答案之书</title>
     <style>
+        :root {
+            --primary-color: #8b4513;
+            --secondary-color: #d2b48c;
+            --bg-color: #f5f0e8;
+            --text-color: #333;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
             font-family: 'Arial', sans-serif;
-            background: #f5f0e8;
-            color: #333;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
+            background: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+            line-height: 1.6;
+        }
+
+        header {
             text-align: center;
+            margin-bottom: 2rem;
         }
+
+        .book-cover {
+            width: 120px;
+            height: auto;
+            margin-bottom: 1rem;
+            border-radius: 4px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
         h1 {
-            color: #8b4513;
-            border-bottom: 2px solid #d2b48c;
-            padding-bottom: 10px;
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 0.5rem;
         }
-        .input-area {
-            margin: 30px 0;
-        }
-        #question {
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
             width: 80%;
-            padding: 12px;
-            border: 2px solid #d2b48c;
-            border-radius: 8px;
-            font-size: 16px;
+            height: 2px;
+            background: var(--secondary-color);
         }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .input-area {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+        }
+
+        #question {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        #question:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
         #answer-btn {
-            margin-top: 20px;
-            padding: 12px 30px;
-            background: #d2b48c;
+            width: 100%;
+            padding: 0.8rem;
+            margin-top: 1rem;
+            background: var(--secondary-color);
             color: white;
             border: none;
-            border-radius: 8px;
-            font-size: 16px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: bold;
             cursor: pointer;
             transition: all 0.3s;
         }
+
         #answer-btn:disabled {
             background: #cccccc;
             cursor: not-allowed;
+            opacity: 0.7;
         }
-        #answer-btn.active {
-            background: #8b4513;
-            transform: scale(1.05);
+
+        #answer-btn:not(:disabled):hover {
+            background: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
+
         .answer-container {
-            margin-top: 40px;
-            padding: 20px;
             background: white;
+            padding: 1.5rem;
             border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            opacity: 0;
+            height: 0;
+            overflow: hidden;
+            transition: all 0.5s ease;
+        }
+
+        .answer-container.show {
+            opacity: 1;
+            height: auto;
             min-height: 150px;
-            display: none;
+            margin-bottom: 2rem;
         }
+
         .page-number {
-            font-size: 14px;
-            color: #8b4513;
-            margin-bottom: 10px;
+            font-size: 0.9rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            font-style: italic;
         }
+
         .answer-text {
-            font-size: 18px;
-            line-height: 1.6;
+            font-size: 1.1rem;
+            white-space: pre-line;
         }
-        .book-cover {
-            width: 150px;
-            margin-bottom: 20px;
+
+        footer {
+            margin-top: auto;
+            font-size: 0.8rem;
+            color: #666;
+            text-align: center;
+            padding-top: 2rem;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 1rem;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
         }
     </style>
 </head>
 <body>
-    <img src="https://via.placeholder.com/150x200/8b4513/ffffff?text=答案之书" alt="答案之书封面" class="book-cover">
-    <h1>答案之书</h1>
-    
-    <div class="input-area">
-        <input type="text" id="question" placeholder="在心中默念你的问题，然后输入到这里...">
-        <button id="answer-btn" disabled>翻开答案之书</button>
+    <header>
+        <img src="https://via.placeholder.com/120x160/8b4513/ffffff?text=答案之书" 
+             alt="答案之书封面" 
+             class="book-cover">
+        <h1>答案之书</h1>
+    </header>
+
+    <div class="container">
+        <div class="input-area">
+            <input type="text" 
+                   id="question" 
+                   placeholder="在心中默念你的问题，然后输入到这里..." 
+                   aria-label="输入你的问题">
+            <button id="answer-btn" disabled>翻开答案之书</button>
+        </div>
+
+        <div class="answer-container" id="answer-container">
+            <div class="page-number">第 <span id="page-num">--</span> 页</div>
+            <div class="answer-text" id="answer-text"></div>
+        </div>
     </div>
-    
-    <div class="answer-container" id="answer-container">
-        <div class="page-number">第 <span id="page-num">--</span> 页</div>
-        <div class="answer-text" id="answer-text">等待翻开答案...</div>
-    </div>
+
+    <footer>
+        <p>静心提问，答案自现</p>
+    </footer>
 
     <script>
-        // 答案库（可自由扩展）
-        const answers = [
-            { page: 42, text: "是的，毫无疑问。" },
-            { page: 87, text: "时机未到，耐心等待。" },
-            { page: 13, text: "换个角度思考问题。" },
-            { page: 56, text: "结果会让你惊喜。" },
-            { page: 29, text: "不如把精力放在其他事情上。" },
-            { page: 101, text: "跟随你的直觉。" },
-            { page: 3, text: "答案就在你心里。" },
-            { page: 64, text: "这需要更多的努力。" },
-            { page: 118, text: "不要强求，顺其自然。" },
-            { page: 5, text: "问一个更明确的问题。" }
-        ];
+        // 模块化答案库
+        const AnswerBook = {
+            answers: [
+                { page: 42, text: "是的，毫无疑问。" },
+                { page: 87, text: "时机未到，耐心等待。" },
+                { page: 13, text: "换个角度思考问题。" },
+                { page: 56, text: "结果会让你惊喜。" },
+                { page: 29, text: "不如把精力放在其他事情上。" },
+                { page: 101, text: "跟随你的直觉。" },
+                { page: 3, text: "答案就在你心里。" },
+                { page: 64, text: "这需要更多的努力。" },
+                { page: 118, text: "不要强求，顺其自然。" },
+                { page: 5, text: "问一个更明确的问题。" },
+                // 可继续添加更多答案...
+            ],
 
-        // DOM 元素
-        const questionInput = document.getElementById('question');
-        const answerBtn = document.getElementById('answer-btn');
-        const answerContainer = document.getElementById('answer-container');
-        const pageNumElement = document.getElementById('page-num');
-        const answerTextElement = document.getElementById('answer-text');
-
-        // 输入框监听
-        questionInput.addEventListener('input', function() {
-            if (this.value.trim().length > 0) {
-                answerBtn.disabled = false;
-                answerBtn.classList.add('active');
-            } else {
-                answerBtn.disabled = true;
-                answerBtn.classList.remove('active');
+            getRandomAnswer() {
+                const randomIndex = Math.floor(Math.random() * this.answers.length);
+                return this.answers[randomIndex];
             }
-        });
+        };
 
-        // 按钮点击事件
-        answerBtn.addEventListener('click', function() {
-            if (questionInput.value.trim() === '') return;
-            
-            // 随机选择答案
-            const randomAnswer = answers[Math.floor(Math.random() * answers.length)];
-            
-            // 显示答案
-            pageNumElement.textContent = randomAnswer.page;
-            answerTextElement.textContent = randomAnswer.text;
-            answerContainer.style.display = 'block';
-            
-            // 动画效果
-            answerContainer.style.animation = 'none';
-            setTimeout(() => {
-                answerContainer.style.animation = 'fadeIn 0.5s';
-            }, 10);
-        });
+        // DOM 控制器
+        const DOMController = {
+            elements: {
+                questionInput: document.getElementById('question'),
+                answerBtn: document.getElementById('answer-btn'),
+                answerContainer: document.getElementById('answer-container'),
+                pageNum: document.getElementById('page-num'),
+                answerText: document.getElementById('answer-text')
+            },
 
-        // 添加简单动画
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes fadeIn {
-                from { opacity: 0; transform: translateY(10px); }
-                to { opacity: 1; transform: translateY(0); }
+            init() {
+                this.setupEventListeners();
+            },
+
+            setupEventListeners() {
+                // 输入框监听
+                this.elements.questionInput.addEventListener('input', () => {
+                    const hasValue = this.elements.questionInput.value.trim().length > 0;
+                    this.elements.answerBtn.disabled = !hasValue;
+                });
+
+                // 按钮点击事件
+                this.elements.answerBtn.addEventListener('click', () => {
+                    this.showAnswer();
+                });
+
+                // 回车键提交
+                this.elements.questionInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' && !this.elements.answerBtn.disabled) {
+                        this.showAnswer();
+                    }
+                });
+            },
+
+            showAnswer() {
+                const question = this.elements.questionInput.value.trim();
+                if (!question) return;
+
+                // 获取随机答案
+                const answer = AnswerBook.getRandomAnswer();
+
+                // 更新DOM
+                this.elements.pageNum.textContent = answer.page;
+                this.elements.answerText.textContent = answer.text;
+                
+                // 显示答案区域
+                this.elements.answerContainer.classList.add('show');
+
+                // 清空问题（可选）
+                // this.elements.questionInput.value = '';
             }
-        `;
-        document.head.appendChild(style);
+        };
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            DOMController.init();
+        });
     </script>
 </body>
 </html>
